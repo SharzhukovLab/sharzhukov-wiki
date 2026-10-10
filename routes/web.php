@@ -7,6 +7,7 @@ use App\Http\Controllers\WikiHomeController;
 use App\Http\Controllers\WikiPageController;
 use App\Http\Controllers\WikiSearchController;
 use App\Http\Controllers\WikiTagController;
+use App\Http\Controllers\SitemapController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WikiHomeController::class, 'index'])->name('wiki.home');
@@ -27,3 +28,7 @@ Route::post('/api/cookie-consent', [CookieConsentController::class, 'store'])->n
 Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
 Route::get('/newsletter/confirm/{token}', [NewsletterController::class, 'confirm'])->name('newsletter.confirm');
 Route::get('/newsletter/unsubscribe/{token}', [NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe');
+
+// ─── SEO ───
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
+Route::get('/robots.txt', [SitemapController::class, 'robots'])->name('robots');
