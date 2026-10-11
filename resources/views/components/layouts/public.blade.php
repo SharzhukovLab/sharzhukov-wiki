@@ -56,7 +56,7 @@
         ['label' => 'Categories', 'url' => '/categories'],
         ['label' => 'All pages',  'url' => '/pages'],
         ['label' => 'Tags',       'url' => '/tags'],
-        ['label' => 'Main ↗',     'url' => 'https://sharzhukov.com', 'external' => true],
+        ['label' => 'Main',     'url' => 'https://sharzhukov.com', 'external' => true],
     ]"
 >
     <form method="GET" action="{{ url('/search') }}" class="brutal-nav-search">
