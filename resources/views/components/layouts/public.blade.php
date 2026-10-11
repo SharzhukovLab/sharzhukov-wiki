@@ -15,11 +15,10 @@
     <link rel="manifest" href="/site.webmanifest">
     <meta name="description" content="Documentation for Sharzhukov's Laboratory projects and technologies.">
     @stack('meta')
-    <script>
+        <script>
         (function () {
             var t = localStorage.getItem('theme');
-            var dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            if (t === 'dark' || (!t && dark)) document.documentElement.classList.add('dark');
+            if (t === 'dark') document.documentElement.classList.add('dark');
         })();
     </script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -43,43 +42,29 @@
 </head>
 <body>
 
-<nav class="brutal-nav">
-    <div class="brutal-nav-inner">
-        <a href="{{ url('/') }}" style="display:flex;align-items:center;gap:12px;text-decoration:none;">
-            <img src="{{ asset('img/branding/core-white.png') }}" alt="Core" style="height:32px;width:auto;filter:drop-shadow(2px 2px 0 var(--brutal-shadow));">
-            <div style="display:flex;flex-direction:column;line-height:1;">
-                <span style="font-family:var(--font-sans);font-weight:900;font-size:14px;letter-spacing:-0.02em;color:var(--brutal-border);">SHARZHUKOV WIKI</span>
-                <span style="font-family:var(--font-mono);font-size:9px;font-weight:700;letter-spacing:0.15em;color:var(--brutal-border);opacity:.6;">// KNOWLEDGE</span>
-            </div>
-        </a>
-
-        <div style="flex:1;display:flex;gap:4px;margin-left:16px;">
-            <a href="{{ url('/categories') }}" class="brutal-nav-link {{ request()->is('categories*') ? 'active' : '' }}">Categories</a>
-            <a href="{{ url('/pages') }}" class="brutal-nav-link {{ request()->is('pages*') ? 'active' : '' }}">All pages</a>
-            <a href="{{ url('/tags') }}" class="brutal-nav-link {{ request()->is('tags*') ? 'active' : '' }}">Tags</a>
-            <a href="https://main.sharzhukov.com" class="brutal-nav-link" target="_blank">Main ↗</a>
-        </div>
-
-        <form method="GET" action="{{ url('/search') }}" style="display:flex;align-items:center;">
-            <input type="text" name="q" placeholder="Search..." value="{{ request('q') }}" style="height:34px;padding:0 12px;border:2px solid var(--brutal-border);background:var(--lab-bg);color:var(--lab-fg);font-family:var(--font-mono);font-size:12px;outline:none;width:180px;">
+<x-lab::site-nav
+    brand-title="SHARZHUKOV WIKI"
+    brand-sub="// KNOWLEDGE"
+    :items="[
+        ['label' => 'Categories', 'url' => '/categories'],
+        ['label' => 'All pages',  'url' => '/pages'],
+        ['label' => 'Tags',       'url' => '/tags'],
+        ['label' => 'Main ↗',     'url' => 'https://sharzhukov.com', 'external' => true],
+    ]"
+>
+    <form method="GET" action="{{ url('/search') }}" class="brutal-nav-search">
+        <input type="text" name="q" placeholder="Search..." value="{{ request('q') }}"
+               style="height:34px;padding:0 12px;border:2px solid var(--brutal-border);background:var(--lab-bg);color:var(--lab-fg);font-family:var(--font-mono);font-size:12px;outline:none;width:180px;">
+    </form>
+    <x-slot:drawer>
+        <form method="GET" action="{{ url('/search') }}" style="display:flex;flex-direction:column;gap:8px;">
+            <label for="nav-search-q" style="font-family:var(--font-mono);font-size:11px;font-weight:700;letter-spacing:0.15em;color:var(--brutal-border);opacity:.7;text-transform:uppercase;">// SEARCH WIKI</label>
+            <input id="nav-search-q" type="text" name="q" placeholder="Search..." value="{{ request('q') }}"
+                   style="height:46px;padding:0 14px;border:2px solid var(--brutal-border);background:var(--lab-bg);color:var(--lab-fg);font-family:var(--font-mono);font-size:15px;outline:none;">
+            <button type="submit" class="brutal-nav-drawer-link" style="background:var(--brutal-accent);color:#fff;border-color:var(--brutal-border);justify-content:center;">Search →</button>
         </form>
-
-        <button type="button" class="lab-theme-toggle" onclick="toggleLabTheme()" aria-label="Toggle theme" style="border:2px solid var(--brutal-border);border-radius:0;box-shadow:2px 2px 0 var(--brutal-shadow);">
-            <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-            <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-        </button>
-
-        @auth
-            <a href="https://account-main.sharzhukov.com/dashboard" style="text-decoration:none;display:inline-flex;">
-                <img src="{{ auth()->user()->avatar_url }}" alt="{{ auth()->user()->name }}" style="width:36px;height:36px;border-radius:0;object-fit:cover;border:2px solid var(--brutal-border);filter:drop-shadow(3px 3px 0 var(--brutal-shadow));">
-            </a>
-        @else
-            <x-lab::button variant="primary" size="sm" href="https://account-main.sharzhukov.com/login?return={{ urlencode(url('/')) }}">
-                SIGN IN →
-            </x-lab::button>
-        @endauth
-    </div>
-</nav>
+    </x-slot:drawer>
+</x-lab::site-nav>
 
 <main>{{ $slot }}</main>
 
