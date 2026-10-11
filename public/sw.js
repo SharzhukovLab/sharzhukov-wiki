@@ -2,7 +2,7 @@
    version: 1.0.0
    site: Sharzhukov Wiki
 */
-const VERSION = 'v1.1.0';
+const VERSION = 'v1.2.0';
 const CACHE_NAME     = 'sharzhukov-wiki-' + VERSION;
 const CACHE_STATIC   = 'sharzhukov-wiki-static-' + VERSION;
 
